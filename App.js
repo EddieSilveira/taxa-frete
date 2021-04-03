@@ -1,12 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Permissions from 'expo-permissions';
+
+import Cabecalho from './components/Cabecalho';
+import Principal from './components/Principal';
 
 export default function App() {
+  const [temPermissao, setTemPermissao] = useState(null);
+
+  useEffect(() => {
+    async () => {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      setTemPermissao(status === 'granted');
+    };
+  }, []);
+
+  // if (!temPermissao) {
+  //   return <Text>Acesso negado a localização do seu equipamento.</Text>;
+  // }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Cabecalho titulo={'Calcula Delivery'} />
+      <Principal />
     </View>
   );
 }
@@ -14,8 +30,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#FED9B0',
   },
 });
